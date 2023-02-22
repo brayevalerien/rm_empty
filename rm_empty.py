@@ -1,5 +1,6 @@
 import os
-
+import tkinter as tk
+import tkinter.filedialog as fd
 
 def rm_empty(dir_path: str) -> int:
     """
@@ -27,7 +28,39 @@ def rm_empty(dir_path: str) -> int:
 
     return rm_count
 
-if __name__ == "__main__":
-    dir_path = "./test - Copie" # change this to the directory you want to clean. TODO: replace this by the call arguments using sys.
-    rm_count = rm_empty(dir_path)
-    print(f"Removed {rm_count} directories in {dir_path} .")
+def select_dir():
+    dir = fd.askdirectory()
+    dir_entry.delete(0, tk.END)
+    dir_entry.insert(0, dir)
+
+def gui_rm_empty():
+    dir = dir_entry.get()
+    nb_dirs_rm = rm_empty(dir)
+    nb_dirs_rm_label.config(text=f"Removed {nb_dirs_rm} empty directories")
+    dir_entry.delete(0, 'end')
+
+# main window
+window = tk.Tk()
+window.title("rm empty")
+
+# label displaying the selected directory
+dir_label = tk.Label(window, text="Selected directory")
+dir_label.pack()
+
+# entry to enter the path of the directory to cleanup
+dir_entry = tk.Entry(window, width=50)
+dir_entry.pack()
+
+# label showing the number of removed directories
+nb_dirs_rm_label = tk.Label(window, text="")
+nb_dirs_rm_label.pack()
+
+# button to open directory selection dialog
+select_bouton = tk.Button(window, text="Browse directories", command=select_dir)
+select_bouton.pack()
+
+# start button
+nettoyer_bouton = tk.Button(window, text="Remove", command=gui_rm_empty)
+nettoyer_bouton.pack()
+
+window.mainloop()
