@@ -5,6 +5,7 @@
 Depending on the command line you run, you can use a GUI or not.
 ### Use GUI
 Open the GUI simply by running the command `python rm_empty.py` in a terminal. It will open a window where you can either type the path to the directory you want to clean up or click on the Browse directories button to select the directory. 
+
 ![UI window](./ui.png)
 To use the GUI, make sure you have the `tkinter` library properly installed.
 ### Use terminal
