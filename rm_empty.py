@@ -3,30 +3,36 @@ import sys
 import tkinter as tk
 import tkinter.filedialog as fd
 
-def rm_empty(dir_path: str) -> int:
+def rm_empty(dir_path: str, rm_files: bool=False) -> list[int]:
     """
     Recursively removes all empty directories within the given directory and
     returns the number of deleted directories.
 
     Args:
         dir_path (str): the path to the directory to be cleaned.
+        rm_files (bool): weither to remove the empty files found or not. 
 
     Returns:
-        int: the number of directories that have been removed during the process.
+        list[int]: the number of directories and the number files that have been removed during the process.
     """
-    rm_count = 0
-    if not os.path.isdir(dir_path): # handles the case where directory path is wrong 
-        print(f"ERROR: {dir_path} is not a directory.")
+    rm_count = [0, 0]
+    if not os.path.isdir(dir_path): # handles the case where directory path is wrong
+        if os.path.isfile(dir_path) and rm_files:
+            # TODO: check if file is empty and delete it
+            pass
+        else:
+            print(f"ERROR: {dir_path} is not a directory.")
         return -1
     ls = os.listdir(dir_path)
     for item in ls:
         item_path = os.path.join(dir_path, item)
         if os.path.isdir(item_path):
-            rm_count += rm_empty(item_path)
+            sub_rm_count = rm_empty(item_path)
+            rm_count[0] += sub_rm_count[0]
+            rm_count[1] += sub_rm_count[1]
     if not os.listdir(dir_path): # case where the directory is empty
         os.rmdir(dir_path)
-        rm_count += 1
-
+        rm_count[0] += 1
     return rm_count
 
 def select_dir():
@@ -40,11 +46,12 @@ def gui_rm_empty():
     if nb_dirs_rm == -1: # invalid path
         nb_dirs_rm_label.config(text=f"ERROR: {dir} is not a directory.")
     else:
-        nb_dirs_rm_label.config(text=f"Removed {nb_dirs_rm} empty directories.")
+        nb_dirs_rm_label.config(text=f"Removed {nb_dirs_rm[0]} directorie(s) and {nb_dirs_rm[1]} file(s).")
     dir_entry.delete(0, 'end')
 
 
 if __name__ == "__main__":
+    rm_files = False # do not delete empty files. TODO: make this an option for the user
     if len(sys.argv) == 1: # open gui
         # main window
         window = tk.Tk()
@@ -79,7 +86,7 @@ if __name__ == "__main__":
                 path_to_dir = input("Path to the directory you want to clean:   ")
             else: 
                 path_to_dir = args[0]
-            rm_count = rm_empty(path_to_dir)
-            print(f"Removed {rm_count} empty directories.")
+            rm_count = rm_empty(path_to_dir, rm_files)
+            print(f"Removed {rm_count[0]} directorie(s) and {rm_count[1]} file(s).")
         else:
             print("Invalid command format.\nUse: python ./rm_empty.py [--no-gui] path_to_dir")
