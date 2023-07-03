@@ -1,3 +1,5 @@
+![logo](./logo.png)
+
 # rm_empty - A Handy Tool to Remove Useless Empty Files and Directories
 
 ## Overview
