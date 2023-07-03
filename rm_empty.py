@@ -3,7 +3,7 @@ import sys
 import tkinter as tk
 import tkinter.filedialog as fd
 
-def rm_empty(dir_path: str, rm_files: bool=False) -> list:
+def rm_empty(dir_path: str, rm_files: bool = False) -> list:
     """
     Recursively removes all empty directories within the given directory and
     returns the number of deleted directories.
@@ -16,7 +16,7 @@ def rm_empty(dir_path: str, rm_files: bool=False) -> list:
         list: the number of directories and the number of files that have been removed during the process.
     """
     rm_count = [0, 0]
-    if not os.path.isdir(dir_path): # handles the case where directory path is wrong
+    if not os.path.isdir(dir_path):
         if os.path.isfile(dir_path) and rm_files:
             if os.stat(dir_path).st_size == 0:
                 os.remove(dir_path)
@@ -37,7 +37,7 @@ def rm_empty(dir_path: str, rm_files: bool=False) -> list:
             if os.stat(item_path).st_size == 0:
                 os.remove(item_path)
                 rm_count[1] += 1
-    if not os.listdir(dir_path): # case where the directory is empty
+    if not os.listdir(dir_path):
         os.rmdir(dir_path)
         rm_count[0] += 1
     return rm_count
@@ -49,17 +49,17 @@ def select_dir():
 
 def gui_rm_empty():
     dir = dir_entry.get()
-    nb_rm = rm_empty(dir)
-    if nb_rm == -1: # invalid path
+    rm_files = rm_files_var.get()
+    nb_rm = rm_empty(dir, rm_files)
+    if nb_rm == -1:
         nb_dirs_rm_label.config(text=f"ERROR: {dir} is not a directory.")
     else:
         nb_dirs_rm_label.config(text=f"Removed {nb_rm[0]} directorie(s) and {nb_rm[1]} file(s).")
     dir_entry.delete(0, 'end')
 
-
 if __name__ == "__main__":
     rm_files = False
-    if len(sys.argv) == 1: # open gui
+    if len(sys.argv) == 1:
         # main window
         window = tk.Tk()
         window.title("rm empty")
@@ -80,14 +80,18 @@ if __name__ == "__main__":
         select_button = tk.Button(window, text="Browse directories", command=select_dir)
         select_button.pack()
 
-        # start button
+        # Add a checkbox variable to store the state of the checkbox
+        rm_files_var = tk.BooleanVar()
+        rm_files_checkbox = tk.Checkbutton(window, text="Remove Empty Files", variable=rm_files_var)
+        rm_files_checkbox.pack()
+
+        # start buttonw
         remove_button = tk.Button(window, text="Remove", command=gui_rm_empty)
         remove_button.pack()
 
         window.mainloop()
     else:
-        args = sys.argv[1:] # get command ligne arguments
-        # parse argument
+        args = sys.argv[1:]
         if "--rm-files" in args:
             rm_files = True
             args.remove("--rm-files")

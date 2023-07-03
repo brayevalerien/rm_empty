@@ -9,10 +9,12 @@ There are two simple ways to use `rm_empty`: with a Graphical User Interface (GU
 ### Using the GUI
 To access the GUI, follow these easy steps:
 1. Open a terminal.
-2. Run the command `python rm_empty.py`.
-3. A small window will appear (see following screenshot), offering you two options:
+2. Run the command `python rm_empty.py`.  
+3. A small window will appear (see following screenshot), offering you different options:
+   - **Remove Empty Files**: Check the box to also remove empty files (if any) in the selected directory.
    - **Enter Path Manually**: You can type in the path of the directory you want to clean up.
    - **Browse Directories**: Click on the "Browse directories" button to conveniently select the target directory.
+4. When the parameters are set right, click on the "Remove" button to clean the selected directory.
 
 ![UI window](./ui.png)
 
@@ -30,6 +32,6 @@ python rm_empty.py [--rm-files] dir_to_path
 ## Upcoming Features
 We are continuously working to enhance this small but powerful script. The following features are currently in development:
 - [x] Option to remove empty files.
-- [ ] GUI support for empty file removal: at the moment, using the GUI will, by default, not remove empty files.
+- [x] GUI support for empty file removal: at the moment, using the GUI will, by default, not remove empty files.
 
 Feel free to contribute to the project, report issues, create pull requests, or suggest new ideas.
